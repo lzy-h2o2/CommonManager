@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.zndroid.common.monitor.impl.DoubleClickListener;
-import com.zndroid.common.monitor.impl.LongClickLinstener;
 import com.zndroid.common.monitor.impl.NoDoubleClickListener;
 
 public class MainActivity extends Activity {
@@ -36,7 +33,7 @@ public class MainActivity extends Activity {
             }
         });
 
-//        textView.setOnLongClickListener(new LongClickLinstener() {
+//        textView.setOnLongClickListener(new LongClickListener() {
 //            @Override
 //            public void onLongClickListener(View view) {
 //                Toast.makeText(MainActivity.this, "llllllll", Toast.LENGTH_LONG).show();

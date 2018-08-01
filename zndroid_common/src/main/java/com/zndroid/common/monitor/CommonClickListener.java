@@ -8,7 +8,7 @@ import android.view.View;
  * @create 2018/7/31
  * @description
  */
-public class CommonClickListener implements ICommonListener {
+public class CommonClickListener implements ICommonClickListener {
 
     @Override
     public void onDoubleClickListener(View view) {

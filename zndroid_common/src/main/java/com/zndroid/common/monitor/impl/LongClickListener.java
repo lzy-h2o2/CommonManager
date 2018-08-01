@@ -7,9 +7,9 @@ import android.view.View;
 /**
  * @author lazy
  * @create 2018/7/31
- * @description please use 'your_view.setOnLongClickListener(new LongClickLinstener...)'
+ * @description please use 'your_view.setOnLongClickListener(new LongClickListener...)'
  */
-public abstract class LongClickLinstener extends CommonClickListener implements View.OnLongClickListener {
+public abstract class LongClickListener extends CommonClickListener implements View.OnLongClickListener {
     public abstract void onLongClickListener(View view);
 
     @Override

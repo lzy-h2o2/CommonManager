@@ -7,7 +7,7 @@ import android.view.View;
  * @create 2018/7/31
  * @description
  */
-public interface ICommonListener {
+public interface ICommonClickListener {
     void onDoubleClickListener(View view);
     void onNoDoubleClickListener(View view);
     void onLongClickListener(View view);
