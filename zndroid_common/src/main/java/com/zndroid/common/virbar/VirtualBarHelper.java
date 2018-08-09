@@ -64,9 +64,12 @@ public class VirtualBarHelper {
             //先取 非 后再 与， 把对应位置的1 置成0，原本为0的还是0
             if (Build.VERSION.SDK_INT >= 14) {
                 newUiOptions &= ~View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-            } if (Build.VERSION.SDK_INT >= 16) {
+            }
+
+            if (Build.VERSION.SDK_INT >= 16) {
                 newUiOptions &= ~View.SYSTEM_UI_FLAG_FULLSCREEN;
             }
+
             if (Build.VERSION.SDK_INT >= 18) {
                 newUiOptions &= ~View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             }
