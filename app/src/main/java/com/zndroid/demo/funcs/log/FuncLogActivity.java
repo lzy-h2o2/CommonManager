@@ -1,8 +1,8 @@
 package com.zndroid.demo.funcs.log;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import com.zndroid.demo.BaseActivity;
 import com.zndroid.demo.R;
 
 /**
@@ -10,7 +10,7 @@ import com.zndroid.demo.R;
  * @create 2018/8/10
  * @description
  */
-public class FuncLogActivity extends Activity {
+public class FuncLogActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

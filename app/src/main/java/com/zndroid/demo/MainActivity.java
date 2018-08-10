@@ -1,6 +1,5 @@
 package com.zndroid.demo;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,7 @@ import com.zndroid.demo.funcs.click.FuncClickActivity;
 import com.zndroid.demo.funcs.log.FuncLogActivity;
 import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
 
-public class MainActivity extends Activity implements View.OnLongClickListener{
+public class MainActivity extends BaseActivity implements View.OnLongClickListener{
 
     private LinearLayout root;
 

@@ -1,6 +1,5 @@
 package com.zndroid.demo.funcs.click;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +8,7 @@ import android.widget.Toast;
 import com.zndroid.common.monitor.impl.DoubleClickListener;
 import com.zndroid.common.monitor.impl.LongClickListener;
 import com.zndroid.common.monitor.impl.NoDoubleClickListener;
+import com.zndroid.demo.BaseActivity;
 import com.zndroid.demo.R;
 
 /**
@@ -16,7 +16,7 @@ import com.zndroid.demo.R;
  * @create 2018/8/10
  * @description
  */
-public class FuncClickActivity extends Activity {
+public class FuncClickActivity extends BaseActivity {
     private Button btn0, btn1, btn2;
 
     @Override
