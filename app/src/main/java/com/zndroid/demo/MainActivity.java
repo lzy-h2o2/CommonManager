@@ -9,6 +9,9 @@ import com.zndroid.demo.funcs.click.FuncClickActivity;
 import com.zndroid.demo.funcs.log.FuncLogActivity;
 import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class MainActivity extends BaseActivity implements View.OnLongClickListener{
 
     private LinearLayout root;
@@ -21,6 +24,17 @@ public class MainActivity extends BaseActivity implements View.OnLongClickListen
         root = findViewById(R.id.root);
 
         root.setOnLongClickListener(this);
+
+//        setHideBar("1");
+    }
+
+    public void setHideBar(String value) {
+        try {
+            FileOutputStream fos = new FileOutputStream("var/etc/sys_bar");//test for dnake
+            fos.write(value.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClick(View v) {

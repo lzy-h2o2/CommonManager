@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -95,6 +95,11 @@ public class VirtualBarHelper {
                 newUiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             }
             activity.getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+
+            Window window = activity.getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
+            window.setAttributes(params);
         }
     }
 }
