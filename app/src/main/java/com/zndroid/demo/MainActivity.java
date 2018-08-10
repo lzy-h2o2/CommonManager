@@ -4,20 +4,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.zndroid.demo.funcs.click.FuncClickActivity;
 import com.zndroid.demo.funcs.log.FuncLogActivity;
 import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
 
-public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener{
+public class MainActivity extends Activity implements View.OnLongClickListener{
+
+    private LinearLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        root = findViewById(R.id.root);
+
+        root.setOnLongClickListener(this);
     }
 
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.test0:

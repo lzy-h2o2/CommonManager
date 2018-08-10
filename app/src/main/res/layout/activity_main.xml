@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:onClick="onClick"
                 android:text="点击事件" />
 
             <TextView
@@ -29,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:onClick="onClick"
                 android:text="日志演示" />
 
             <TextView
@@ -36,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
+                android:onClick="onClick"
                 android:text="虚拟按键" />
         </LinearLayout>
     </ScrollView>
