@@ -1,14 +1,18 @@
 package com.zndroid.demo;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.zndroid.common.monitor.impl.NoDoubleClickListener;
+import com.zndroid.demo.funcs.click.FuncClickActivity;
+import com.zndroid.demo.funcs.log.FuncLogActivity;
+import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener{
 
     private TextView textView;
 
@@ -39,5 +43,34 @@ public class MainActivity extends Activity {
 //                Toast.makeText(MainActivity.this, "llllllll", Toast.LENGTH_LONG).show();
 //            }
 //        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.test0:
+                jump(FuncClickActivity.class);
+                break;
+            case R.id.test1:
+                jump(FuncLogActivity.class);
+                break;
+            case R.id.test2:
+                jump(FuncVirBarActivity.class);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        switch (v.getId()) {
+            case R.id.root:
+                finish();
+                break;
+        }
+        return true;
+    }
+
+    private void jump(Class c) {
+        startActivity(new Intent(this, c));
     }
 }

@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".funcs.virbar.FuncVirBarActivity"/>
+        <activity android:name=".funcs.log.FuncLogActivity"/>
+        <activity android:name=".funcs.click.FuncClickActivity"/>
     </application>
 
 </manifest>
