@@ -1,6 +1,8 @@
 package com.zndroid.common.virbar;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +15,20 @@ import java.lang.reflect.Method;
  * @author lazy
  * @create 2018/8/7
  * @description 底部虚拟按键的隐藏与关闭
- * （to see '/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java'）
+ * （to see '/frameworks/base/packages/SystemUI/src/com/android/systemui/statusbar/phone/PhoneStatusBar.java' 的 addNavigationBar()方法）
  * 也可以修改源码处理显示逻辑
+ *
+ * 另外顺便说一下隐藏顶部状态栏的做法，比较简单：
+ * 在对应Activity或者直接在Manifest的application节点更改属性"android:theme"为"android:Theme.NoTitleBar.Fullscreen"，
+ * 当然也可以继承这个theme或者在自己定义的theme style下添加如下两个属性值：
+ * <code>
+         "android:windowNoTitle"=true
+         "android:windowFullscreen"=true
+ * </code>
+ * 当然通过代码也可以达到效果,在setContentView(....)上面添加如下代码
+ * <code>
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+ * </code>
  */
 public class VirtualBarHelper {
     private final static String TAG = "NavigationBarHelper";
@@ -27,6 +41,33 @@ public class VirtualBarHelper {
 
     public static VirtualBarHelper getHelper() {
         return $$.$;
+    }
+
+    /**
+     * <P>shang</P>
+     * <P>判断是否有虚拟按键</P>
+     * @param context
+     * @return
+     */
+    public static boolean deviceHasNavigationBar(Context context) {
+        boolean hasNavigationBar = false;
+        Resources rs = context.getResources();
+        int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (id > 0) {
+            hasNavigationBar = rs.getBoolean(id);
+        }
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method m = systemPropertiesClass.getMethod("get", String.class);
+            String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                hasNavigationBar = false;
+            } else if ("0".equals(navBarOverride)) {
+                hasNavigationBar = true;
+            }
+        } catch (Exception e) {
+        }
+        return hasNavigationBar;
     }
 
     /** *
@@ -85,20 +126,27 @@ public class VirtualBarHelper {
         boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
         if (!isImmersiveModeEnabled) {
             Log.i(TAG, "Turning immersive mode mode on. ");
+
             if (Build.VERSION.SDK_INT >= 14) {
                 newUiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             }
-//            if (Build.VERSION.SDK_INT >= 16) {
+
+            if (Build.VERSION.SDK_INT >= 16) {
 //                newUiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
-//            }//这样为全部隐藏
-            if (Build.VERSION.SDK_INT >= 18) {
+//                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+//                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            }//这样为全部隐藏
+
+            if (Build.VERSION.SDK_INT >= 19) {
                 newUiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+                newUiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE;
             }
             activity.getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
 
             Window window = activity.getWindow();
             WindowManager.LayoutParams params = window.getAttributes();
-            params.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|View.SYSTEM_UI_FLAG_IMMERSIVE;
+            params.systemUiVisibility = newUiOptions;
             window.setAttributes(params);
         }
     }
