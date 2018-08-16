@@ -49,7 +49,7 @@ public class VirtualBarHelper {
      * @param context
      * @return
      */
-    public static boolean deviceHasNavigationBar(Context context) {
+    public boolean deviceHasNavigationBar(Context context) {
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();
         int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
