@@ -1,5 +1,7 @@
 package com.zndroid.common.log;
 
+import android.util.Log;
+
 import com.zndroid.common.BuildConfig;
 
 /**
@@ -10,5 +12,10 @@ import com.zndroid.common.BuildConfig;
  **/
 public class ZLogger {
 
+    private static String TAG = "[" + ZLogger.class.getSimpleName() + "]";
     private boolean isDebug = BuildConfig.DEBUG;
+
+    public static void i(String msg) {
+        Log.i(TAG, msg);
+    }
 }
