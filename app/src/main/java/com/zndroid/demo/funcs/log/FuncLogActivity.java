@@ -2,6 +2,7 @@ package com.zndroid.demo.funcs.log;
 
 import android.os.Bundle;
 
+import com.zndroid.common.log.ZLogger;
 import com.zndroid.demo.BaseActivity;
 import com.zndroid.demo.R;
 
@@ -16,5 +17,7 @@ public class FuncLogActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.funcs_log_layout);
+        ZLogger.init(this);
+        ZLogger.i("123");
     }
 }
