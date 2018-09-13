@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.zndroid.demo.funcs.click.FuncClickActivity;
 import com.zndroid.demo.funcs.log.FuncLogActivity;
+import com.zndroid.demo.funcs.toast.FunToastActivity;
 import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
 
 import java.io.FileOutputStream;
@@ -47,6 +48,9 @@ public class MainActivity extends BaseActivity implements View.OnLongClickListen
                 break;
             case R.id.test2:
                 jump(FuncVirBarActivity.class);
+                break;
+            case R.id.test3:
+                jump(FunToastActivity.class);
                 break;
         }
     }
