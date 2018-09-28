@@ -13,11 +13,11 @@ public abstract class NoDoubleClickListener extends CommonClickListener implemen
 
     public abstract void onNoDoubleClickListener(View view);
 
-    private final int KEY = -44;
-    private final long DELAY_TIME = 500;
-
     @Override
     public void onClick(View view) {
+        int KEY = -44;
+        long DELAY_TIME = 500;
+
         long lastTime = view.getTag(KEY) == null ? 0 : (long) view.getTag(KEY);
         if (System.currentTimeMillis() - lastTime > DELAY_TIME) {
             onNoDoubleClickListener(view);

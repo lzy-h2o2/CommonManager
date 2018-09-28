@@ -36,7 +36,7 @@ public class VirtualBarHelper {
     private VirtualBarHelper(){}
 
     private static class $$ {
-        private static VirtualBarHelper $ = new VirtualBarHelper();
+        private static final VirtualBarHelper $ = new VirtualBarHelper();
     }
 
     public static VirtualBarHelper getHelper() {
@@ -44,7 +44,6 @@ public class VirtualBarHelper {
     }
 
     /**
-     * <P>shang</P>
      * <P>判断是否有虚拟按键</P>
      * @param context
      * @return
@@ -66,6 +65,7 @@ public class VirtualBarHelper {
                 hasNavigationBar = true;
             }
         } catch (Exception e) {
+            Log.e("VirtualBarHelper", e.getMessage());
         }
         return hasNavigationBar;
     }
@@ -99,7 +99,10 @@ public class VirtualBarHelper {
     public void showBar(Activity activity){
         int uiOptions = activity.getWindow().getDecorView().getSystemUiVisibility();
         int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        boolean isImmersiveModeEnabled = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        }
         if (isImmersiveModeEnabled) {
             Log.i(TAG, "Turning immersive mode mode off. ");
             //先取 非 后再 与， 把对应位置的1 置成0，原本为0的还是0
@@ -111,7 +114,7 @@ public class VirtualBarHelper {
                 newUiOptions &= ~View.SYSTEM_UI_FLAG_FULLSCREEN;
             }
 
-            if (Build.VERSION.SDK_INT >= 18) {
+            if (Build.VERSION.SDK_INT >= 19) {
                 newUiOptions &= ~View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             }
             activity.getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
@@ -119,11 +122,14 @@ public class VirtualBarHelper {
     }
 
     public void hideBar(Activity activity) {
-        // The UI options currently enabled are represented by a bitfield.
-        // getSystemUiVisibility() gives us that bitfield.
+        // The UI options currently enabled are represented by a bit field.
+        // getSystemUiVisibility() gives us that bit field.
         int uiOptions = activity.getWindow().getDecorView().getSystemUiVisibility();
         int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        boolean isImmersiveModeEnabled = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        }
         if (!isImmersiveModeEnabled) {
             Log.i(TAG, "Turning immersive mode mode on. ");
 
@@ -131,12 +137,12 @@ public class VirtualBarHelper {
                 newUiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             }
 
-            if (Build.VERSION.SDK_INT >= 16) {
+//            if (Build.VERSION.SDK_INT >= 16) {
 //                newUiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
 //                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 //                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 //                newUiOptions |= View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-            }//这样为全部隐藏
+//            }//这样为全部隐藏
 
             if (Build.VERSION.SDK_INT >= 19) {
                 newUiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;

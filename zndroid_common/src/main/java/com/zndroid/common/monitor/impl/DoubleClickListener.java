@@ -1,9 +1,9 @@
 package com.zndroid.common.monitor.impl;
 
-import com.zndroid.common.monitor.CommonClickListener;
-
 import android.os.SystemClock;
 import android.view.View;
+
+import com.zndroid.common.monitor.CommonClickListener;
 
 /**
  * @author lazy
@@ -14,14 +14,14 @@ public abstract class DoubleClickListener extends CommonClickListener implements
 
     public abstract void onDoubleClickListener(View view);
 
-    private final int DELAY_TIME = 500;
-    private long[] mHits = new long[2];
+    private final long[] mHits = new long[2];
 
     @Override
     public void onClick(View view) {
         System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
         mHits[mHits.length - 1] = SystemClock.uptimeMillis();
 
+        int DELAY_TIME = 500;
         if (DELAY_TIME > (SystemClock.uptimeMillis() - mHits[0])) {
             onDoubleClickListener(view);
         }

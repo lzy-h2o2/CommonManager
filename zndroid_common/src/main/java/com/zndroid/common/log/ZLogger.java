@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -48,8 +49,6 @@ public class ZLogger {
 
     private static String pckName;
 
-    private static String className;
-
     private static String simpleClassName;
 
     private static String methodName;
@@ -73,11 +72,9 @@ public class ZLogger {
 
     private static boolean e = true;
 
-    private static String saveUrl = Environment.getExternalStorageDirectory() + "/zlogger/logs/sync/";
+    private static final String saveUrl = Environment.getExternalStorageDirectory() + "/zlogger/logs/sync/";
 
-    private static Properties properties = new Properties();
-
-    private static String propertiesName = "log.properties";
+    private static final Properties properties = new Properties();
 
     public static void init(Context context) {
         initProperties(context);
@@ -87,6 +84,7 @@ public class ZLogger {
 
     private static void initProperties(Context context) {
         try {
+            String propertiesName = "log.properties";
             InputStream is = context.getAssets().open(propertiesName);
             properties.load(is);
             is.close();
@@ -161,7 +159,7 @@ public class ZLogger {
     }
 
     private static void initLogMember(StackTraceElement[] sElements) {
-        className = sElements[1].getClassName();
+        String className = sElements[1].getClassName();
         int i = className.lastIndexOf(".");
         if (i + 1 < className.length() - 1)
             simpleClassName = className.substring(i + 1, className.length());
@@ -187,8 +185,8 @@ public class ZLogger {
     }
 
     private static void print(LEVEL level, String... msg) {
-        String tag = "";
-        String text = "";
+        String tag;
+        String text;
         if (msg != null && msg.length == 1) {
             tag = formatTag();
             text = msg[0];
@@ -270,8 +268,8 @@ public class ZLogger {
      * @param msg
      */
     private static void saveLogToFile(LEVEL level, String... msg) {
-        String tag = "";
-        String text = "";
+        String tag;
+        String text;
         if (msg != null && msg.length == 1) {
             tag = formatTag();
             text = msg[0];
@@ -327,13 +325,11 @@ public class ZLogger {
     }
 
     private static String formatTag() {
-        StringBuffer strBuf = new StringBuffer();
-        strBuf.append(simpleClassName);
-        strBuf.append(".");
-        strBuf.append(methodName);
-        strBuf.append(":#");
-        strBuf.append(lineNumber);
-        return strBuf.toString();
+        return simpleClassName
+                + "."
+                + methodName
+                + ":#"
+                + lineNumber;
     }
 
     public static void v(String... msg) {
@@ -391,9 +387,9 @@ public class ZLogger {
         }
     }
 
-    public static class DateFormatUtil {
-        public static final String FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
-        public static final String FORMAT_2 = "yyyyMMdd";
+    static class DateFormatUtil {
+        static final String FORMAT_1 = "yyyy-MM-dd HH:mm:ss";
+        static final String FORMAT_2 = "yyyyMMdd";
 
         public DateFormatUtil() {
         }
@@ -402,16 +398,15 @@ public class ZLogger {
             return format("yyyy-MM-dd HH:mm:ss");
         }
 
-        public static String format(String format, Date date) {
-            String formatDate = (new SimpleDateFormat(format)).format(new Date());
-            return formatDate;
+        static String format(String format, Date date) {
+            return (new SimpleDateFormat(format, Locale.CHINA)).format(date);
         }
 
         public static String format(String format, long ms) {
             return format(format, new Date(ms));
         }
 
-        public static String format(String format) {
+        static String format(String format) {
             return format(format, new Date());
         }
     }
