@@ -8,6 +8,9 @@ import android.content.Context;
  * @description
  */
 public interface IToast {
+    int SHOW_SHORT = 0x000;
+    int SHOW_LONG = 0x111;
+    int SHOW_DEFINED = 0x222;
     /** default time (short)*/
     void show(Context context, String content);
     /** long time (long)*/

@@ -24,7 +24,12 @@ public class FunToastActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toast_default:
-                ZToast.getDefault().show(FunToastActivity.this, "default toast");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ZToast.getDefault().showLong(FunToastActivity.this, "default toast");
+                    }
+                }).start();
                 break;
         }
     }
