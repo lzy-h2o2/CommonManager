@@ -32,7 +32,12 @@ public class FunToastActivity extends BaseActivity {
                 }).start();
                 break;
             case R.id.toast_plus:
-                ZToast.getToastPlus().show(FunToastActivity.this, "plus toast");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ZToast.getToastPlus().show(FunToastActivity.this, "plus toast123123123123123123123123123123123123123123123");
+                    }
+                }).start();
                 break;
         }
     }

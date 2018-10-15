@@ -29,9 +29,10 @@ public class ZToastPlus implements IToast {
     private int mHeight;
     private int mResId = -1;
     private int mAnimationsId = -1;
+    private int mBackgroundId = R.drawable.zcomm_bg_toast_plus;//default background
 
-    private final int SHORT_DURATION_TIMEOUT = 4000;//units ： ms
-    private final int LONG_DURATION_TIMEOUT = 7000;//units ： ms
+    private final int SHORT_DURATION_TIMEOUT = 2000;//units ： ms
+    private final int LONG_DURATION_TIMEOUT = 3500;//units ： ms
 
     private final int WHAT_SHOW = 0x123;
     private final int WHAT_HIDE = 0x223;
@@ -85,11 +86,13 @@ public class ZToastPlus implements IToast {
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        View view = LayoutInflater.from(context).inflate(R.layout.zcomm_toast_plus_layout, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.zcomm_layout_toast_plus, null);
         mContainerView = view;
 
         mRootRelativeLayout = (RelativeLayout) view.findViewById(R.id.zcomm_toast_plus_root_rl);
         mTextView = (TextView) view.findViewById(R.id.zcomm_toast_plus_tv);
+
+        mRootRelativeLayout.setBackgroundResource(mBackgroundId);
 
         switch (mToastPosition) {
             case TOP:
@@ -97,6 +100,7 @@ public class ZToastPlus implements IToast {
                 break;
             case BOTTOM:
                 mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+                mLayoutParams.y = -200;
                 break;
             case CENTER:
                 mLayoutParams.gravity = Gravity.CENTER;
@@ -140,7 +144,7 @@ public class ZToastPlus implements IToast {
 
         //是否可点击
         if (!isClickable) {
-            mLayoutParams.flags = mLayoutParams.flags | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+            mLayoutParams.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         } else {
             mRootRelativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -194,14 +198,22 @@ public class ZToastPlus implements IToast {
         mToastPosition = toastPosition;
         return this;
     }
+
+    public ZToastPlus setmBackgroundId(int mBackgroundId) {
+        this.mBackgroundId = mBackgroundId;
+        return this;
+    }
+
     /////////////////////////
 
     private void pushArgsToMessage(Context context, String content, int time) {
         if (null == context)
             throw new UnsupportedOperationException("'context' is 'null', please check it.");
 
-        if (mHandler.hasMessages(WHAT_SHOW))
+        if (mHandler.hasMessages(WHAT_SHOW)) {
             mHandler.removeMessages(WHAT_SHOW);//处理 多次触发操作
+            isShow = false;
+        }
 
         Bundle b = new Bundle();
         b.putString(KEY, content);
@@ -215,7 +227,7 @@ public class ZToastPlus implements IToast {
     }
 
     private void _show(String msg) {
-        if (isShow && null != msg) {
+        if (!isShow && null != msg) {
             isShow = true;
 
             mTextView.setText(msg);
@@ -226,7 +238,7 @@ public class ZToastPlus implements IToast {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void _close() {
         if (null != mWindowManager && mContainerView.isAttachedToWindow())
-            mWindowManager.removeViewImmediate(mContainerView);
+            mWindowManager.removeView(mContainerView);
 
         isShow = false;
     }

@@ -2,9 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
     android:gravity="center"
-    android:id="@+id/zcomm_toast_plus_root_rl">
+    android:id="@+id/zcomm_toast_plus_root_rl"
+    android:background="@drawable/zcomm_bg_toast_plus">
 
     <TextView
         android:id="@+id/zcomm_toast_plus_tv"
