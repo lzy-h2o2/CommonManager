@@ -1,6 +1,7 @@
 package com.zndroid.common.toast;
 
 import com.zndroid.common.toast.impl.ZToastDefault;
+import com.zndroid.common.toast.impl.ZToastPlus;
 
 /**
  * @author lazy
@@ -14,6 +15,10 @@ public class ZToast {
 
     public static ZToastDefault getDefault() {
         return ZToastDefault.getToast();
+    }
+
+    public static ZToastPlus getToastPlus() {
+        return ZToastPlus.getToast();
     }
     ////////////////////////////////////////////////
 }
