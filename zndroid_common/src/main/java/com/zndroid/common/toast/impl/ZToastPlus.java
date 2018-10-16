@@ -236,7 +236,6 @@ public class ZToastPlus implements IToast {
 
         if (mHandler.hasMessages(WHAT_SHOW)) {
             mHandler.removeMessages(WHAT_SHOW);//处理 多次触发操作
-            isShow = false;
         }
 
         Bundle b = new Bundle();
@@ -278,6 +277,9 @@ public class ZToastPlus implements IToast {
     }
 
     public void showDefinedTime(Context context, String content, int duration) {
+        if (isShow)
+            return;
+
         init(context);
         catchHandler();
         pushArgsToMessage(context, content, duration);
