@@ -76,13 +76,19 @@ public class ZToastPlus implements IToast {
         void onClick();
     }
 
+    private int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
     private void init(Context context) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mLayoutParams.format = PixelFormat.TRANSLUCENT;
-        mLayoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        mLayoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;//@deprecated for non-system apps. Use {@link #TYPE_APPLICATION_OVERLAY} instead.
+
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
@@ -94,13 +100,25 @@ public class ZToastPlus implements IToast {
 
         mRootRelativeLayout.setBackgroundResource(mBackgroundId);
 
+        //这里想说明一下mLayoutParams.y设置的目的
+        //源码中状态栏、虚拟按键
+//        <dimen name="toast_y_offset">24dp</dimen>
+//        <dimen name="status_bar_height">24dp</dimen>
+//        <dimen name="navigation_bar_height">48dp</dimen>
+        //为了显示效果一致，顾，对Y方向添加了偏移量处理
+        //建议不采用'TOP'形式，因为，状态栏，标题栏高度不可控，如果采用的是默认主题或者原生系统倒是可以通过
+        //https://blog.csdn.net/a_running_wolf/article/details/50477965
+        //的方案进行获取，但是不灵活，另外两个方式要在onWindowFocusChanged中处理，但是，作为lib无法控制
+        //开发者调用的时机，在此，开发者可以通过动态设置偏移量的形式处理
+
         switch (mToastPosition) {
             case TOP:
                 mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                mLayoutParams.y = dp2px(context, 64.0f);
                 break;
             case BOTTOM:
                 mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-                mLayoutParams.y = -200;
+                mLayoutParams.y = dp2px(context, 64.0f);
                 break;
             case CENTER:
                 mLayoutParams.gravity = Gravity.CENTER;
@@ -199,8 +217,14 @@ public class ZToastPlus implements IToast {
         return this;
     }
 
-    public ZToastPlus setmBackgroundId(int mBackgroundId) {
-        this.mBackgroundId = mBackgroundId;
+    /**
+     * 原生Toast背景：'?android:attr/toastFrameBackground'
+     * 是一个引用，所以才会因为版本的不同而不同，在源码中是个.9图，此处暴露出方法提供开发者自定义，当然也可采用默认
+     *
+     * @param mDrawableResId - drawable 资源id
+     * */
+    public ZToastPlus setmBackgroundId(int mDrawableResId) {
+        this.mBackgroundId = mDrawableResId;
         return this;
     }
 
@@ -218,7 +242,7 @@ public class ZToastPlus implements IToast {
         Bundle b = new Bundle();
         b.putString(KEY, content);
 
-        Message m = new Message();
+        Message m = mHandler.obtainMessage();
         m.setData(b);
         m.arg1 = time;
         m.what = WHAT_SHOW;

@@ -45,7 +45,7 @@ public class ZToastDefault implements IToast {
         Bundle b = new Bundle();
         b.putString(KEY, content);
 
-        Message m = new Message();
+        Message m = mHandler.obtainMessage();
         m.setData(b);
         m.obj = context;
         m.what = time;

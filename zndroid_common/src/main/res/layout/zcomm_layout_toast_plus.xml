@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
+    android:layout_height="match_parent"
+    android:padding="12dp"
     android:gravity="center"
     android:id="@+id/zcomm_toast_plus_root_rl"
     android:background="@drawable/zcomm_bg_toast_plus">
@@ -13,6 +10,7 @@
     <TextView
         android:id="@+id/zcomm_toast_plus_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
 
 </RelativeLayout>
