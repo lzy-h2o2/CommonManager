@@ -36,7 +36,9 @@ public class FunToastActivity extends BaseActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        ZToast.getToastPlus().showOn(ZToastPlus.ToastPosition.BOTTOM)
+                        ZToast.getToastPlus()
+                                .showOn(ZToastPlus.ToastPosition.BOTTOM)
+                                .setImagerSrc(R.drawable.ic_launcher_background, ZToastPlus.ImgPosition.RIGHT)
                                 .show(FunToastActivity.this, "plus toast");
                     }
                 }).start();

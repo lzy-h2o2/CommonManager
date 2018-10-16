@@ -19,6 +19,9 @@ import android.widget.TextView;
 import com.zndroid.common.R;
 import com.zndroid.common.toast.IToast;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 /**
  * @author lazy
  * @create 2018/10/12
@@ -84,8 +87,8 @@ public class ZToastPlus implements IToast {
     private void init(Context context) {
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
-        mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mLayoutParams.width = WRAP_CONTENT;
+        mLayoutParams.height = WRAP_CONTENT;
         mLayoutParams.format = PixelFormat.TRANSLUCENT;
         mLayoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;//@deprecated for non-system apps. Use {@link #TYPE_APPLICATION_OVERLAY} instead.
 
@@ -149,10 +152,11 @@ public class ZToastPlus implements IToast {
 
             mImageView = new ImageView(context);
             mImageView.setImageResource(mResId);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(mWidth, mHeight);
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(60, 60);
+            mImageView.setLayoutParams(layoutParams);
 
             layoutParams.addRule(position, R.id.zcomm_toast_plus_tv);//相对文字的位置
-            mRootRelativeLayout.addView(mImageView);
+            mRootRelativeLayout.addView(mImageView, layoutParams);
         }
 
         //添加动画
