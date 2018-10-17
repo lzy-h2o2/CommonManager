@@ -31,6 +31,8 @@ public class ZToastPlus implements IToast {
     private int mAnimationsId = -1;
     private int mBackgroundId = R.drawable.zcomm_bg_toast_plus;//default background
 
+    private float offset = 64.0f;
+
     private final int SHORT_DURATION_TIMEOUT = 2000;//units ： ms
     private final int LONG_DURATION_TIMEOUT = 3500;//units ： ms
 
@@ -100,25 +102,27 @@ public class ZToastPlus implements IToast {
 
         mRootRelativeLayout.setBackgroundResource(mBackgroundId);
 
-        //这里想说明一下mLayoutParams.y设置的目的
-        //源码中状态栏、虚拟按键
-//        <dimen name="toast_y_offset">24dp</dimen>
-//        <dimen name="status_bar_height">24dp</dimen>
-//        <dimen name="navigation_bar_height">48dp</dimen>
-        //为了显示效果一致，顾，对Y方向添加了偏移量处理
-        //建议不采用'TOP'形式，因为，状态栏，标题栏高度不可控，如果采用的是默认主题或者原生系统倒是可以通过
-        //https://blog.csdn.net/a_running_wolf/article/details/50477965
-        //的方案进行获取，但是不灵活，另外两个方式要在onWindowFocusChanged中处理，但是，作为lib无法控制
-        //开发者调用的时机，在此，开发者可以通过动态设置偏移量的形式处理
+        /**
+         * 这里想说明一下mLayoutParams.y设置的目的
+         源码中状态栏、虚拟按键
+         <dimen name="toast_y_offset">24dp</dimen>
+         <dimen name="status_bar_height">24dp</dimen>
+         <dimen name="navigation_bar_height">48dp</dimen>
+         为了显示效果一致，顾，对Y方向添加了偏移量处理
+         建议不采用'TOP'形式，因为，状态栏，标题栏高度不可控，如果采用的是默认主题或者原生系统倒是可以通过
+         https://blog.csdn.net/a_running_wolf/article/details/50477965
+         的方案进行获取，但是不灵活，另外两个方式要在onWindowFocusChanged中处理，
+         但是，作为lib无法控制开发者调用的时机，在此，开发者可以通过动态设置偏移量的形式处理 {@link #showOn(ToastPosition, float)}
+         * */
 
         switch (mToastPosition) {
             case TOP:
                 mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                mLayoutParams.y = dp2px(context, 64.0f);
+                mLayoutParams.y = dp2px(context, offset);
                 break;
             case BOTTOM:
                 mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-                mLayoutParams.y = dp2px(context, 64.0f);
+                mLayoutParams.y = dp2px(context, offset);
                 break;
             case CENTER:
                 mLayoutParams.gravity = Gravity.CENTER;
@@ -212,7 +216,25 @@ public class ZToastPlus implements IToast {
         return this;
     }
 
+    /**
+     * 设置Toast显示位置
+     *
+     * @param toastPosition
+     * */
     public ZToastPlus showOn(ToastPosition toastPosition) {
+        mToastPosition = toastPosition;
+        return this;
+    }
+
+    /**
+     * 设置Toast显示位置
+     * 如果设置居中，偏移量无效
+     *
+     * @param toastPosition
+     * @param offset - 自定义偏移量，由开发者自行控制
+     * */
+    public ZToastPlus showOn(ToastPosition toastPosition, float offset) {
+        this.offset = offset;
         mToastPosition = toastPosition;
         return this;
     }
@@ -236,7 +258,6 @@ public class ZToastPlus implements IToast {
 
         if (mHandler.hasMessages(WHAT_SHOW)) {
             mHandler.removeMessages(WHAT_SHOW);//处理 多次触发操作
-            isShow = false;
         }
 
         Bundle b = new Bundle();
