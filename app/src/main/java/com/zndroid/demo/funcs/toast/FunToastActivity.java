@@ -1,6 +1,7 @@
 package com.zndroid.demo.funcs.toast;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.zndroid.common.toast.ZToast;
@@ -28,7 +29,9 @@ public class FunToastActivity extends BaseActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        ZToast.getDefault().show(FunToastActivity.this, "default toast");
+                        ZToast.getDefault()
+                                .with(FunToastActivity.this)
+                                .showLong("default toast");
                     }
                 }).start();
                 break;
@@ -37,9 +40,16 @@ public class FunToastActivity extends BaseActivity {
                     @Override
                     public void run() {
                         ZToast.getToastPlus()
+                                .with(FunToastActivity.this)
                                 .showOn(ZToastPlus.ToastPosition.BOTTOM)
-                                .setImagerSrc(R.drawable.ic_launcher_background, ZToastPlus.ImgPosition.RIGHT)
-                                .show(FunToastActivity.this, "plus toast");
+                                .canClick(true, new ZToastPlus.CallBack() {
+                                    @Override
+                                    public void onClick() {
+                                        Log.i("hyhy", "im clicked");
+                                    }
+                                })
+                                .setImageSrc(R.drawable.ic_launcher_background, ZToastPlus.ImgPosition.RIGHT, 10, 10)
+                                .show("plus toast");
                     }
                 }).start();
                 break;

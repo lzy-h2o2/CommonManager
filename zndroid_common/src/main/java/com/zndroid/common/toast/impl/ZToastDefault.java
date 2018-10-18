@@ -17,29 +17,36 @@ import com.zndroid.common.toast.IToast;
 public class ZToastDefault implements IToast {
     private static Toast mToast;
     private Handler mHandler;
+    private Context mContext;
 
     private final String KEY = "zcomm_toast_msg";
     @Override
-    public void show(Context context, String content) {
-        pushArgsToMessage(context, content, IToast.SHOW_SHORT);
+    public void show(String content) {
+        pushArgsToMessage(content, IToast.SHOW_SHORT);
     }
 
     @Override
-    public void showLong(Context context, String content) {
-        pushArgsToMessage(context, content, IToast.SHOW_LONG);
+    public void showLong(String content) {
+        pushArgsToMessage(content, IToast.SHOW_LONG);
     }
 
-    private void _show(Context context, String content, int duration) {
+    @Override
+    public ZToastDefault with(Context context) {
+        mContext = context.getApplicationContext();
+        return this;
+    }
+
+    private void _show(String content, int duration) {
         if (null == mToast)
-            mToast = Toast.makeText(context, content, duration == IToast.SHOW_LONG ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+            mToast = Toast.makeText(mContext, content, duration == IToast.SHOW_LONG ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
         else
             mToast.setText(content);
 
         mToast.show();
     }
 
-    private void pushArgsToMessage(Context context, String content, int time) {
-        if (null == context)
+    private void pushArgsToMessage(String content, int time) {
+        if (null == mContext)
             throw new UnsupportedOperationException("'context' is 'null', please check it.");
 
         Bundle b = new Bundle();
@@ -47,7 +54,6 @@ public class ZToastDefault implements IToast {
 
         Message m = mHandler.obtainMessage();
         m.setData(b);
-        m.obj = context;
         m.what = time;
 
         mHandler.sendMessage(m);
@@ -60,10 +66,10 @@ public class ZToastDefault implements IToast {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case IToast.SHOW_SHORT:
-                        _show((Context) msg.obj, msg.getData().getString(KEY), IToast.SHOW_SHORT);
+                        _show(msg.getData().getString(KEY), IToast.SHOW_SHORT);
                         break;
                     case IToast.SHOW_LONG:
-                        _show((Context) msg.obj, msg.getData().getString(KEY), IToast.SHOW_LONG);
+                        _show(msg.getData().getString(KEY), IToast.SHOW_LONG);
                         break;
                 }
                 super.handleMessage(msg);

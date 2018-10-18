@@ -10,8 +10,10 @@ import android.content.Context;
 public interface IToast {
     int SHOW_SHORT = 0x000;
     int SHOW_LONG = 0x111;
+
+    IToast with(Context context);
     /** default time (short)*/
-    void show(Context context, String content);
+    void show(String content);
     /** long time (long)*/
-    void showLong(Context context, String content);
+    void showLong(String content);
 }

@@ -2,15 +2,21 @@ package com.zndroid.common.toast.impl;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.AnimatorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -19,7 +25,6 @@ import android.widget.TextView;
 import com.zndroid.common.R;
 import com.zndroid.common.toast.IToast;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
@@ -34,10 +39,11 @@ public class ZToastPlus implements IToast {
     private int mAnimationsId = -1;
     private int mBackgroundId = R.drawable.zcomm_bg_toast_plus;//default background
 
+    private float scale;
     private float offset = 64.0f;
 
-    private final int SHORT_DURATION_TIMEOUT = 2000;//units ： ms
-    private final int LONG_DURATION_TIMEOUT = 3500;//units ： ms
+    private final long SHORT_DURATION_TIMEOUT = 2000;//units ： ms
+    private final long LONG_DURATION_TIMEOUT = 3500;//units ： ms
 
     private final int WHAT_SHOW = 0x123;
     private final int WHAT_HIDE = 0x223;
@@ -48,6 +54,7 @@ public class ZToastPlus implements IToast {
     private boolean isShowAnimation = false;
 
     private final String KEY = "zcomm_toast_msg";
+    private final String TIME = "zcomm_toast_time";
 
     private ImgPosition mImgPosition = ImgPosition.LEFT;
     private ToastPosition mToastPosition = ToastPosition.BOTTOM;
@@ -56,12 +63,14 @@ public class ZToastPlus implements IToast {
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mLayoutParams;
 
+    private Bitmap mBitmap = null;
     private View mContainerView;
     private ImageView mImageView;
     private TextView mTextView;
     private RelativeLayout mRootRelativeLayout;
 
     private Handler mHandler;
+    private Context mContext;
     private CallBack mCallBack;
 
     public enum ImgPosition {
@@ -81,13 +90,19 @@ public class ZToastPlus implements IToast {
         void onClick();
     }
 
-    private int dp2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
+    private int dp2px(float dpValue) {
         return (int) (dpValue * scale + 0.5f);
     }
 
-    private void init(Context context) {
-        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    @Override
+    public ZToastPlus with(Context context) {
+        mContext = context.getApplicationContext();
+        scale = context.getResources().getDisplayMetrics().density;
+        return this;
+    }
+
+    private void init() {
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         mLayoutParams.width = WRAP_CONTENT;
         mLayoutParams.height = WRAP_CONTENT;
@@ -97,20 +112,13 @@ public class ZToastPlus implements IToast {
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        View view = LayoutInflater.from(context).inflate(R.layout.zcomm_layout_toast_plus, null);
-        mContainerView = view;
-
-        mRootRelativeLayout = (RelativeLayout) view.findViewById(R.id.zcomm_toast_plus_root_rl);
-        mTextView = (TextView) view.findViewById(R.id.zcomm_toast_plus_tv);
-
-        mRootRelativeLayout.setBackgroundResource(mBackgroundId);
-
         /**
          * 这里想说明一下mLayoutParams.y设置的目的
-         源码中状态栏、虚拟按键
+         源码中状态栏、虚拟按键资源如下：
          <dimen name="toast_y_offset">24dp</dimen>
          <dimen name="status_bar_height">24dp</dimen>
          <dimen name="navigation_bar_height">48dp</dimen>
+
          为了显示效果一致，顾，对Y方向添加了偏移量处理
          建议不采用'TOP'形式，因为，状态栏，标题栏高度不可控，如果采用的是默认主题或者原生系统倒是可以通过
          https://blog.csdn.net/a_running_wolf/article/details/50477965
@@ -121,47 +129,55 @@ public class ZToastPlus implements IToast {
         switch (mToastPosition) {
             case TOP:
                 mLayoutParams.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                mLayoutParams.y = dp2px(context, offset);
+                mLayoutParams.y = dp2px(offset);
                 break;
             case BOTTOM:
                 mLayoutParams.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-                mLayoutParams.y = dp2px(context, offset);
+                mLayoutParams.y = dp2px(offset);
                 break;
             case CENTER:
                 mLayoutParams.gravity = Gravity.CENTER;
                 break;
         }
 
-        //添加图片
+        int positionId = R.layout.zcomm_layout_toast_plus;//默认不显示图片样式
         if (isShowImage) {
-            int position = RelativeLayout.ALIGN_PARENT_LEFT;
             switch (mImgPosition) {
                 case TOP:
-                    position = RelativeLayout.ALIGN_PARENT_TOP;
+                    positionId = R.layout.zcomm_layout_toast_plus_top;
                     break;
                 case BOTTOM:
-                    position = RelativeLayout.ALIGN_PARENT_BOTTOM;
+                    positionId = R.layout.zcomm_layout_toast_plus_bottom;
                     break;
                 case LEFT:
-                    position = RelativeLayout.ALIGN_PARENT_LEFT;
+                    positionId = R.layout.zcomm_layout_toast_plus_left;
                     break;
                 case RIGHT:
-                    position = RelativeLayout.ALIGN_PARENT_RIGHT;
-                    break;
-                default:
-                    isShowImage = false;
+                    positionId = R.layout.zcomm_layout_toast_plus_right;
                     break;
 
             }
-
-            mImageView = new ImageView(context);
-            mImageView.setImageResource(mResId);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(60, 60);
-            mImageView.setLayoutParams(layoutParams);
-
-            layoutParams.addRule(position, R.id.zcomm_toast_plus_tv);//相对文字的位置
-            mRootRelativeLayout.addView(mImageView, layoutParams);
         }
+
+        mContainerView = LayoutInflater.from(mContext).inflate(positionId, null);
+
+        //添加图片
+        if (isShowImage) {
+            ImageView mImageView = (ImageView) mContainerView.findViewById(R.id.zcomm_toast_plus_img);
+            ViewGroup.LayoutParams layoutParams = mImageView.getLayoutParams();
+            layoutParams.width = mWidth;
+            layoutParams.height = mHeight;
+
+            if (-1 != mResId)
+                mImageView.setImageResource(mResId);
+            if (null != mBitmap)
+                mImageView.setImageBitmap(mBitmap);//允许动态接收图片资源
+        }
+
+        mRootRelativeLayout = (RelativeLayout) mContainerView.findViewById(R.id.zcomm_toast_plus_root_rl);
+        mTextView = (TextView) mContainerView.findViewById(R.id.zcomm_toast_plus_tv);
+
+        mRootRelativeLayout.setBackgroundResource(mBackgroundId);
 
         //添加动画
         if (isShowAnimation) {
@@ -181,7 +197,6 @@ public class ZToastPlus implements IToast {
                 }
             });
         }
-
     }
 
     private void catchHandler() {
@@ -189,7 +204,7 @@ public class ZToastPlus implements IToast {
             @Override
             public void handleMessage(Message msg) {
                 if(msg.what == WHAT_SHOW) {
-                    mHandler.sendEmptyMessageDelayed(WHAT_HIDE, msg.arg1);
+                    mHandler.sendEmptyMessageDelayed(WHAT_HIDE, msg.getData().getLong(TIME, SHORT_DURATION_TIMEOUT));
                     _show(msg.getData().getString(KEY));
                 }
                 else if (msg.what == WHAT_HIDE)
@@ -201,20 +216,61 @@ public class ZToastPlus implements IToast {
     }
 
     /////////////////////////
-    public ZToastPlus setImagerSrc(int drawableId, ImgPosition imgPosition) {
+    /**
+     * setting Image src of bitmap for show Image Toast
+     *
+     * @param bitmap
+     * @param imgPosition
+     * @param height_dp
+     * @param width_dp
+     * */
+    public ZToastPlus setImageSrc(@NonNull Bitmap bitmap, @NonNull ImgPosition imgPosition, float width_dp, float height_dp) {
         isShowImage = true;
-        mResId = drawableId;
+
+        mBitmap = bitmap;
         mImgPosition = imgPosition;
+        mWidth = dp2px(width_dp);
+        mHeight = dp2px(height_dp);
         return this;
     }
 
-    public ZToastPlus withAnimation(boolean showAnimation, int animationsId) {
+    /**
+     * setting Image src of drawableResId for show Image Toast
+     *
+     * @param drawableResId
+     * @param imgPosition
+     * @param height_dp
+     * @param width_dp
+     * */
+    public ZToastPlus setImageSrc(@DrawableRes int drawableResId, @NonNull ImgPosition imgPosition, float width_dp, float height_dp) {
+        isShowImage = true;
+
+        mResId = drawableResId;
+        mImgPosition = imgPosition;
+        mWidth = dp2px(width_dp);
+        mHeight = dp2px(height_dp);
+        return this;
+    }
+
+    /**
+     * setting Toast animation of animationsId
+     *
+     * @param animationsId
+     * */
+    public ZToastPlus withAnimation(@AnimatorRes int animationsId) {
+        isShowAnimation = true;
+
         mAnimationsId = animationsId;
-        isShowAnimation = showAnimation;
         return this;
     }
 
-    public ZToastPlus canClick(boolean clickable, CallBack callBack) {
+    /**
+     * setting Toast can click or not
+     *
+     * @param clickable
+     * @param callBack
+     * */
+    public ZToastPlus canClick(boolean clickable, @NonNull CallBack callBack) {
         isClickable = clickable;
         mCallBack = callBack;
         return this;
@@ -225,7 +281,7 @@ public class ZToastPlus implements IToast {
      *
      * @param toastPosition
      * */
-    public ZToastPlus showOn(ToastPosition toastPosition) {
+    public ZToastPlus showOn(@Nullable ToastPosition toastPosition) {
         mToastPosition = toastPosition;
         return this;
     }
@@ -237,7 +293,7 @@ public class ZToastPlus implements IToast {
      * @param toastPosition
      * @param offset - 自定义偏移量，由开发者自行控制
      * */
-    public ZToastPlus showOn(ToastPosition toastPosition, float offset) {
+    public ZToastPlus showOn(@NonNull ToastPosition toastPosition, float offset) {
         this.offset = offset;
         mToastPosition = toastPosition;
         return this;
@@ -249,14 +305,13 @@ public class ZToastPlus implements IToast {
      *
      * @param mDrawableResId - drawable 资源id
      * */
-    public ZToastPlus setmBackgroundId(int mDrawableResId) {
+    public ZToastPlus setmBackgroundId(@DrawableRes int mDrawableResId) {
         this.mBackgroundId = mDrawableResId;
         return this;
     }
 
     /////////////////////////
-
-    private void pushArgsToMessage(Context context, String content, int time) {
+    private void pushArgsToMessage(Context context, String content, long time) {
         if (null == context)
             throw new UnsupportedOperationException("'context' is 'null', please check it.");
 
@@ -266,10 +321,10 @@ public class ZToastPlus implements IToast {
 
         Bundle b = new Bundle();
         b.putString(KEY, content);
+        b.putLong(TIME, time);
 
         Message m = mHandler.obtainMessage();
         m.setData(b);
-        m.arg1 = time;
         m.what = WHAT_SHOW;
 
         mHandler.sendMessageDelayed(m, 0);//立即显示，之所以用sendMessageDelayed，因为这个方法可取消，用于处理多次触发操作
@@ -280,7 +335,8 @@ public class ZToastPlus implements IToast {
             isShow = true;
 
             mTextView.setText(msg);
-            mWindowManager.addView(mContainerView, mLayoutParams);
+
+            mWindowManager.addView(mRootRelativeLayout, mLayoutParams);
         }
     }
 
@@ -292,23 +348,39 @@ public class ZToastPlus implements IToast {
         isShow = false;
     }
 
+    /**
+     * short time show (2 seconds)  units ：ms
+     *
+     * @param content - String
+     * */
     @Override
-    public void show(Context context, String content) {
-        showDefinedTime(context, content, SHORT_DURATION_TIMEOUT);
+    public void show(String content) {
+        showDefinedTime(content, SHORT_DURATION_TIMEOUT);
     }
 
+    /**
+     * long time show (3.5 seconds)  units ：ms
+     *
+     * @param content - String
+     * */
     @Override
-    public void showLong(Context context, String content) {
-        showDefinedTime(context, content, LONG_DURATION_TIMEOUT);
+    public void showLong(String content) {
+        showDefinedTime(content, LONG_DURATION_TIMEOUT);
     }
 
-    public void showDefinedTime(Context context, String content, int duration) {
+    /**
+     * defined time to show   units ：ms
+     *
+     * @param content - String
+     * @param duration - long  units ：ms
+     * */
+    public void showDefinedTime(String content, long duration) {
         if (isShow)
-            return;
+            return;//防止多次触发
 
-        init(context);
+        init();
         catchHandler();
-        pushArgsToMessage(context, content, duration);
+        pushArgsToMessage(mContext, content, duration);
     }
 
     ////////////////////////////////////////////////
