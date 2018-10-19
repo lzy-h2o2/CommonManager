@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Anim-->
+    <style name="zcomm_anim">
+        <!--base anim  - nothing-->
+    </style>
+
+    <style name="zcomm_anim.plus_toast_dock">
+        <item name="android:windowEnterAnimation">@anim/zcomm_anim_dock_bottom_enter</item>
+        <item name="android:windowExitAnimation">@anim/zcomm_anim_dock_bottom_exit</item>
+    </style>
+    <style name="zcomm_anim.plus_toast_fade">
+        <item name="android:windowEnterAnimation">@anim/zcomm_anim_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/zcomm_anim_fade_out</item>
+    </style>
+    <style name="zcomm_anim.plus_toast_miui">
+        <item name="android:windowEnterAnimation">@anim/zcomm_anim_miui_enter</item>
+        <item name="android:windowExitAnimation">@anim/zcomm_anim_miui_exit</item>
+    </style>
+</resources>

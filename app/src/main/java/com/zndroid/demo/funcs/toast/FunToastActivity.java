@@ -48,8 +48,9 @@ public class FunToastActivity extends BaseActivity {
                                         Log.i("hyhy", "im clicked");
                                     }
                                 })
+                                .withAnimation(ZToastPlus.ToastAnimStyle.ANIMATION_DOCK)
                                 .setImageSrc(R.drawable.ic_launcher_background, ZToastPlus.ImgPosition.RIGHT, 10, 10)
-                                .show("plus toast");
+                                .showLong("plus toast");
                     }
                 }).start();
                 break;

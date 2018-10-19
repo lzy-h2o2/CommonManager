@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.annotation.AnimatorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +83,12 @@ public class ZToastPlus implements IToast {
         TOP,
         CENTER,
         BOTTOM
+    }
+
+    public enum ToastAnimStyle {
+        ANIMATION_DOCK,
+        ANIMATION_FADE,
+        ANIMATION_MIUI
     }
 
     public interface CallBack {
@@ -255,12 +260,28 @@ public class ZToastPlus implements IToast {
     /**
      * setting Toast animation of animationsId
      *
-     * @param animationsId
+     * @param animationStyleId
      * */
-    public ZToastPlus withAnimation(@AnimatorRes int animationsId) {
+    public ZToastPlus withAnimation(@StyleRes int animationStyleId) {
         isShowAnimation = true;
 
-        mAnimationsId = animationsId;
+        mAnimationsId = animationStyleId;
+        return this;
+    }
+
+    /**
+     * setting Toast animation of supplied
+     *
+     * */
+    public ZToastPlus withAnimation(@NonNull ToastAnimStyle animStyle) {
+        isShowAnimation = true;
+
+        int[] animations = {
+                R.style.zcomm_anim_plus_toast_dock,
+                R.style.zcomm_anim_plus_toast_fade,
+                R.style.zcomm_anim_plus_toast_miui
+        };//match with ToastAnimStyle define, you know
+        mAnimationsId = animations[animStyle.ordinal()];
         return this;
     }
 
@@ -281,7 +302,7 @@ public class ZToastPlus implements IToast {
      *
      * @param toastPosition
      * */
-    public ZToastPlus showOn(@Nullable ToastPosition toastPosition) {
+    public ZToastPlus showOn(@NonNull ToastPosition toastPosition) {
         mToastPosition = toastPosition;
         return this;
     }
@@ -354,7 +375,7 @@ public class ZToastPlus implements IToast {
      * @param content - String
      * */
     @Override
-    public void show(String content) {
+    public void show(@NonNull String content) {
         showDefinedTime(content, SHORT_DURATION_TIMEOUT);
     }
 
@@ -364,7 +385,7 @@ public class ZToastPlus implements IToast {
      * @param content - String
      * */
     @Override
-    public void showLong(String content) {
+    public void showLong(@NonNull String content) {
         showDefinedTime(content, LONG_DURATION_TIMEOUT);
     }
 
