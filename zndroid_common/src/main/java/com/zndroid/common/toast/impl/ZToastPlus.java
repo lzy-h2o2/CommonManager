@@ -99,8 +99,12 @@ public class ZToastPlus implements IToast {
         return (int) (dpValue * scale + 0.5f);
     }
 
+    /**
+     * attach Context
+     * please call it at first
+     * */
     @Override
-    public ZToastPlus with(Context context) {
+    public ZToastPlus with(@NonNull Context context) {
         mContext = context.getApplicationContext();
         scale = context.getResources().getDisplayMetrics().density;
         return this;
@@ -371,6 +375,7 @@ public class ZToastPlus implements IToast {
 
     /**
      * short time show (2 seconds)  units ：ms
+     * please call it at last
      *
      * @param content - String
      * */
@@ -381,6 +386,7 @@ public class ZToastPlus implements IToast {
 
     /**
      * long time show (3.5 seconds)  units ：ms
+     * please call it at last
      *
      * @param content - String
      * */
@@ -391,6 +397,7 @@ public class ZToastPlus implements IToast {
 
     /**
      * defined time to show   units ：ms
+     * please call it at last
      *
      * @param content - String
      * @param duration - long  units ：ms

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.zndroid.common.toast.IToast;
@@ -20,18 +21,35 @@ public class ZToastDefault implements IToast {
     private Context mContext;
 
     private final String KEY = "zcomm_toast_msg";
+
+    /**
+     * short time show (2 seconds)  units ：ms
+     * please call it at last
+     *
+     * @param content - String
+     * */
     @Override
-    public void show(String content) {
+    public void show(@NonNull String content) {
         pushArgsToMessage(content, IToast.SHOW_SHORT);
     }
 
+    /**
+     * short time show (3.5 seconds)  units ：ms
+     * please call it at last
+     *
+     * @param content - String
+     * */
     @Override
-    public void showLong(String content) {
+    public void showLong(@NonNull String content) {
         pushArgsToMessage(content, IToast.SHOW_LONG);
     }
 
+    /**
+     * attach Context
+     * please call it at first
+     * */
     @Override
-    public ZToastDefault with(Context context) {
+    public ZToastDefault with(@NonNull Context context) {
         mContext = context.getApplicationContext();
         return this;
     }
