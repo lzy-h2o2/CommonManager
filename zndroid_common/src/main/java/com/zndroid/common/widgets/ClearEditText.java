@@ -1,10 +1,10 @@
 package com.zndroid.common.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 
 import com.zndroid.common.R;
 
@@ -21,7 +22,8 @@ import com.zndroid.common.R;
  * @create 2018/10/22
  * @description
  */
-public class ClearEditText extends AppCompatEditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher {
+@SuppressLint("AppCompatCustomView")
+public class ClearEditText extends EditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher {
 
     private Drawable mClearTextIcon;
     private View.OnFocusChangeListener mOnFocusChangeListener;
@@ -43,7 +45,9 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
     }
 
     private void init(final Context context) {
-        final Drawable drawable = ContextCompat.getDrawable(context, R.drawable.zcommon_ic_clear_mtrl_alpha);
+        final Drawable drawable = null == getCompoundDrawables()[2] ?
+                ContextCompat.getDrawable(context, R.drawable.zcommon_ic_clear_mtrl_alpha) : getCompoundDrawables()[2];
+
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable); //Wrap the drawable so that it can be tinted pre Lollipop
         DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());
         mClearTextIcon = wrappedDrawable;
@@ -126,21 +130,17 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
     }
 
     /**
-     * 设置晃动动画
-     */
+     * setting shake animation when text is empty
+     * default 3 times a second
+     * */
     public void setShakeAnimation(){
-        this.setAnimation(shakeAnimation(5));
+        this.setAnimation(shakeAnimation(3));
     }
 
-    /**
-     * 晃动动画
-     * @param counts 1秒钟晃动多少下
-     * @return
-     */
-    public static Animation shakeAnimation(int counts){
+    private Animation shakeAnimation(int counts){
         Animation translateAnimation = new TranslateAnimation(0, 10, 0, 0);
         translateAnimation.setInterpolator(new CycleInterpolator(counts));
-        translateAnimation.setDuration(1000);
+        translateAnimation.setDuration(500);
         return translateAnimation;
     }
 }
