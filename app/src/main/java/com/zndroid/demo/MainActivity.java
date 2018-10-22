@@ -7,8 +7,9 @@ import android.widget.LinearLayout;
 
 import com.zndroid.demo.funcs.click.FuncClickActivity;
 import com.zndroid.demo.funcs.log.FuncLogActivity;
-import com.zndroid.demo.funcs.toast.FunToastActivity;
+import com.zndroid.demo.funcs.toast.FuncToastActivity;
 import com.zndroid.demo.funcs.virbar.FuncVirBarActivity;
+import com.zndroid.demo.funcs.widgets.FuncWidgetsActivity;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,7 +51,10 @@ public class MainActivity extends BaseActivity implements View.OnLongClickListen
                 jump(FuncVirBarActivity.class);
                 break;
             case R.id.test3:
-                jump(FunToastActivity.class);
+                jump(FuncToastActivity.class);
+                break;
+            case R.id.test4:
+                jump(FuncWidgetsActivity.class);
                 break;
         }
     }

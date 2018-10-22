@@ -14,7 +14,7 @@ import com.zndroid.demo.R;
  * @create 2018/9/13
  * @description
  */
-public class FunToastActivity extends BaseActivity {
+public class FuncToastActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class FunToastActivity extends BaseActivity {
                     @Override
                     public void run() {
                         ZToast.getDefault()
-                                .with(FunToastActivity.this)
+                                .with(FuncToastActivity.this)
                                 .showLong("default toast");
                     }
                 }).start();
@@ -40,7 +40,7 @@ public class FunToastActivity extends BaseActivity {
                     @Override
                     public void run() {
                         ZToast.getToastPlus()
-                                .with(FunToastActivity.this)
+                                .with(FuncToastActivity.this)
                                 .showOn(ZToastPlus.ToastPosition.BOTTOM)
                                 .canClick(new ZToastPlus.CallBack() {
                                     @Override

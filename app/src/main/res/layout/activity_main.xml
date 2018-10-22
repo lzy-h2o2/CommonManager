@@ -52,6 +52,15 @@
                 android:clickable="true"
                 android:onClick="onClick"
                 android:text="Toast显示" />
+
+            <TextView
+                android:id="@+id/test4"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:text="自定义控件" />
         </LinearLayout>
     </ScrollView>
 
