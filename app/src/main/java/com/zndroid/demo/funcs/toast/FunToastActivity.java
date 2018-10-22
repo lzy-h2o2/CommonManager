@@ -42,7 +42,7 @@ public class FunToastActivity extends BaseActivity {
                         ZToast.getToastPlus()
                                 .with(FunToastActivity.this)
                                 .showOn(ZToastPlus.ToastPosition.BOTTOM)
-                                .canClick(true, new ZToastPlus.CallBack() {
+                                .canClick(new ZToastPlus.CallBack() {
                                     @Override
                                     public void onClick() {
                                         Log.i("hyhy", "im clicked");

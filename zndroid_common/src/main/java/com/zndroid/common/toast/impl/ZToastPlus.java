@@ -292,11 +292,10 @@ public class ZToastPlus implements IToast {
     /**
      * setting Toast can click or not
      *
-     * @param clickable
      * @param callBack
      * */
-    public ZToastPlus canClick(boolean clickable, @NonNull CallBack callBack) {
-        isClickable = clickable;
+    public ZToastPlus canClick(@NonNull CallBack callBack) {
+        isClickable = true;
         mCallBack = callBack;
         return this;
     }
