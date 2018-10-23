@@ -1,8 +1,8 @@
 # CommonManager
-Android University Functions `'lib'`（安卓通用功能库）
--------------------
-使用方式：TODO
 
+Android University Functions `'lib'`（安卓通用功能库）
+
+使用方式：TODO
 
 # Log
 日志输出相关功能
