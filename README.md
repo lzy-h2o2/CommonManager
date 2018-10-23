@@ -27,6 +27,7 @@ e=true
 1. `ZLogger.init(Context)` 
 
 ___初始化，建议在`Application`的`onCreate(...)`方法中调用。___
+
 2. `ZLogger.setDebug(boolean)`
 
 ___设置是否开启日志，建议参数根据您应用`BuildConfig.Debug`字段传入，这样可以根据打包的类型动态控制是否显示日志（所以我建议您还是用Android Studio开发吧)___
