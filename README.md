@@ -2,14 +2,32 @@
 
 Android University Functions `'lib'`（安卓通用功能库）
 
+*建议您使用Android Studio作为开发工具，本lib的IDE是AS，某些加载资源文件功能可能不会支持Eclipse*
+
 使用方式：TODO
 
 ### Log
 日志输出相关功能
 
-提供了默认日志显示和动态配置两种方式
-##### API
+提供了默认日志显示和动态配置两种方式，默认方式您在初始化之后可以完全无顾虑地像使用Android自带的Log一样调动处理（默认TAG：`ZLogger`），
+也可以动态控制日志的展示或者保存日志文件，默认在`SD卡根目录/zlogger/logs/sync/`目录下（Android 6.0+ 需要获取存储权限），日志显示开关默认会关闭，您可以通过设置开关参数`ZLogger.setDebug(boolean)`去开启日志。
+另外还可以在您项目，我姑且叫`app`module下的`assets`目录下新建一个配置文件`log.properties`，用于控制日志的开关以及开启何种类型的日志，比如:
 
-__初始化__ ``ZLogger.init(Context)``
+```xml
+saveFile=true
+i=true
+d=true
+w=true
+v=true
+e=true
+```
+
+**API**
+
+1. 初始化 `ZLogger.init(Context)` 
+建议在`Application`的`onCreate(...)`方法中调用。
+2. 设置是否开启日志`ZLogger.setDebug(boolean)` 
+建议参数根据您应用`BuildConfig.Debug`字段传入，这样可以根据打包的类型动态控制是否显示日志（所以我建议您还是用Android Studio开发吧）
+
 
 
