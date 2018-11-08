@@ -8,6 +8,8 @@ Android University Functions `'lib'`（安卓通用功能库）
 
 [⭐]_使用频度_
 
+@[TOC](目录)
+
 ### Log
 日志输出相关功能
 
@@ -26,11 +28,11 @@ e=true
 
 **API**
 
-1. `ZLogger.init(Context)` 
+1. `ZLogger.init(Context)` [⭐⭐⭐⭐⭐]
 
     初始化，建议在`Application`的`onCreate(...)`方法中调用。
 
-2. `ZLogger.setDebug(boolean)`
+2. `ZLogger.setDebug(boolean)` [⭐⭐⭐⭐]
 
     设置是否开启日志，建议参数根据您应用`BuildConfig.Debug`字段传入，这样可以根据打包的类型动态控制是否显示日志（所以我建议您还是用Android Studio开发吧)。
 
@@ -46,14 +48,14 @@ e=true
     
     通过API的形式控制`log.properties`中指定的字段，是否开启相应功能。
 
-7. `ZLogger.v/d/i/w/e(String...)`
+7. `ZLogger.v/d/i/w/e(String...)` [⭐⭐⭐⭐⭐]
 
     在debug可用状态下显示对应的debug信息。
     
-8. `ZLogger.e(String, Exception)`
+8. `ZLogger.e(String, Exception)` [⭐⭐]
 
     显示error日志的构造函数，可以传入`Exception`。
     
-9. `ZLogger.e(Throwable)`
+9. `ZLogger.e(Throwable)` [⭐]
 
     显示error日志的构造函数，可以传入`Throwable`。
