@@ -1,5 +1,6 @@
 [TOC]
 
+
 # CommonManager
 
 Android University Functions `'lib'`（安卓通用功能库）
