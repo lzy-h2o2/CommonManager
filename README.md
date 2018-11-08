@@ -1,3 +1,5 @@
+@[TOC](目录)
+
 # CommonManager
 
 Android University Functions `'lib'`（安卓通用功能库）
@@ -6,9 +8,7 @@ Android University Functions `'lib'`（安卓通用功能库）
 
 使用方式：TODO
 
-[⭐]_使用频度_
-
-@[TOC](目录)
+[⭐]__使用频度__ _标注的方法足够用了_
 
 ### Log
 日志输出相关功能
@@ -52,10 +52,10 @@ e=true
 
     在debug可用状态下显示对应的debug信息。
     
-8. `ZLogger.e(String, Exception)` [⭐⭐]
+8. `ZLogger.e(String, Exception)`
 
     显示error日志的构造函数，可以传入`Exception`。
     
-9. `ZLogger.e(Throwable)` [⭐]
+9. `ZLogger.e(Throwable)`
 
     显示error日志的构造函数，可以传入`Throwable`。
