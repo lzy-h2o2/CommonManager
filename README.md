@@ -80,6 +80,7 @@ e=true
     ```
 
 2. `NoDoubleClickListener` [⭐⭐⭐⭐]
+
     防止重复点击，时间间隔`0.5s`。
     
     ```java
@@ -93,6 +94,7 @@ e=true
     ```
 
 3. `LongClickListener` [⭐⭐⭐⭐]
+
     长按监听同系统长按监听一致。
     
     ```java
