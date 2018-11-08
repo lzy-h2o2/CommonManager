@@ -58,3 +58,48 @@ e=true
 9. `ZLogger.e(Throwable)`
 
     显示error日志的构造函数，可以传入`Throwable`。
+   
+## monitor
+监听相关功能
+
+提供了双击监听、不允许重复点击监听、长按监听。您可以根据实际生产需求配合使用。
+
+**API**
+
+1. `DoubleClickListener` [⭐️⭐️]
+
+    双击监听，目前`0.5s`间隔触发视为双击，您可以在控件中这么处理。
+    
+    ```java
+    btn1.setOnClickListener(new DoubleClickListener() {
+            @Override
+            public void onDoubleClickListener(View view) {
+                //"on double click"
+            }
+        });
+    ```
+
+2. `NoDoubleClickListener` [⭐⭐⭐⭐]
+    防止重复点击，时间间隔`0.5s`。
+    
+    ```java
+        btn2.setOnClickListener(new NoDoubleClickListener() {
+            @Override
+            public void onNoDoubleClickListener(View view) {
+                //"on no double click"
+            }
+        });
+
+    ```
+
+3. `LongClickListener` [⭐⭐⭐⭐]
+    长按监听同系统长按监听一致。
+    
+    ```java
+        btn0.setOnLongClickListener(new LongClickListener() {
+            @Override
+            public void onLongClickListener(View view) {
+                //"on long click"
+            }
+        });
+    ```
