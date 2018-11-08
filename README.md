@@ -1,8 +1,6 @@
 [TOC]
 
-
-# CommonManager
-
+## CommonManager
 Android University Functions `'lib'`（安卓通用功能库）
 
 *建议您使用Android Studio作为开发工具，本lib的IDE是AS，某些加载资源文件功能可能不会支持Eclipse*
