@@ -2,7 +2,7 @@ package com.zndroid.demo.funcs.virbar;
 
 import android.os.Bundle;
 
-import com.zndroid.common.virbar.VirtualBarHelper;
+import com.zndroid.common.virbar.ZVirtualBarHelper;
 import com.zndroid.demo.BaseActivity;
 import com.zndroid.demo.R;
 
@@ -15,7 +15,7 @@ public class FuncVirBarActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        VirtualBarHelper.getHelper().hideBar(this);
+        ZVirtualBarHelper.getHelper().hideBar(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.funcs_vir_bar_layout);
@@ -25,6 +25,6 @@ public class FuncVirBarActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        VirtualBarHelper.getHelper().hideBar(this);
+        ZVirtualBarHelper.getHelper().hideBar(this);
     }
 }

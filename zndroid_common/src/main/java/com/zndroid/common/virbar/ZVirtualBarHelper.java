@@ -30,16 +30,16 @@ import java.lang.reflect.Method;
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
  * </code>
  */
-public class VirtualBarHelper {
-    private final static String TAG = "NavigationBarHelper";
+public class ZVirtualBarHelper {
+    private final static String TAG = "ZVirtualBarHelper";
 
-    private VirtualBarHelper(){}
+    private ZVirtualBarHelper(){}
 
     private static class $$ {
-        private static final VirtualBarHelper $ = new VirtualBarHelper();
+        private static final ZVirtualBarHelper $ = new ZVirtualBarHelper();
     }
 
-    public static VirtualBarHelper getHelper() {
+    public static ZVirtualBarHelper getHelper() {
         return $$.$;
     }
 
@@ -65,7 +65,7 @@ public class VirtualBarHelper {
                 hasNavigationBar = true;
             }
         } catch (Exception e) {
-            Log.e("VirtualBarHelper", e.getMessage());
+            Log.e("ZVirtualBarHelper", e.getMessage());
         }
         return hasNavigationBar;
     }

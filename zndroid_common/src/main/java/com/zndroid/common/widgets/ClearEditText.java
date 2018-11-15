@@ -23,7 +23,7 @@ import com.zndroid.common.R;
  * @description Android建议自定义EditText采用继承AppCompatEditText的形式，但是会出现兼容性问题：
  * 您需要将Activity继承AppCompatActivity，而且该Activity的主题也要设置为
  * <code>@style/AppCompat.Theme</code>类似的主题
- * 为了提高该库的兼容性，顾继承最基本的EditText
+ * 为了提高该库的兼容性，故继承最基本的EditText
  */
 @SuppressLint("AppCompatCustomView")
 public class ClearEditText extends EditText implements View.OnTouchListener, View.OnFocusChangeListener, TextWatcher {

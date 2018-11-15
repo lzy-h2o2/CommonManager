@@ -64,7 +64,6 @@ public class ZToastPlus implements IToast {
 
     private Bitmap mBitmap = null;
     private View mContainerView;
-    private ImageView mImageView;
     private TextView mTextView;
     private RelativeLayout mRootRelativeLayout;
 
